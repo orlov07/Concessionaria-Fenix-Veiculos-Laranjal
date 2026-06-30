@@ -51,8 +51,8 @@
 
   /* HERO */
   .hero{
-    position:relative;height:100vh;height:100dvh;display:flex;align-items:center;justify-content:center;
-    text-align:center;overflow:hidden;background:#000;
+    position:relative;height:100vh;display:flex;align-items:center;justify-content:center;
+    text-align:center;overflow:hidden;
   }
   .hero video{
     position:absolute;top:0;left:0;width:100%;height:100%;
@@ -121,13 +121,20 @@
   .card{
     background:var(--black-soft);border:1px solid #1f1f1f;border-radius:14px;overflow:hidden;
     transition:transform 0.35s, border-color 0.35s, box-shadow .35s;position:relative;
+    cursor:pointer;
   }
   .card:hover{
     transform:translateY(-8px);border-color:var(--gold);
     box-shadow:0 20px 40px rgba(0,0,0,0.5);
   }
-  .card-img{height:210px;overflow:hidden;position:relative;}
-  .card-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s;}
+  .card-img{
+    height:210px;overflow:hidden;position:relative;
+    background:linear-gradient(180deg, #171717, #0d0d0d);
+  }
+  .card-img img{
+    width:100%;height:100%;object-fit:contain;object-position:center;
+    transition:transform .5s;
+  }
   .card:hover .card-img img{transform:scale(1.08);}
   .card-tag{
     position:absolute;top:14px;left:14px;background:var(--gold);color:#0a0a0a;
@@ -149,6 +156,67 @@
     transition:0.3s;
   }
   .card-cta:hover{background:var(--gold);color:#0a0a0a;}
+
+  /* MODAL */
+  .modal{
+    position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+    padding:24px;background:rgba(0,0,0,0.78);backdrop-filter:blur(8px);
+    z-index:300;opacity:0;pointer-events:none;transition:opacity .25s ease;
+  }
+  .modal.open{opacity:1;pointer-events:auto;}
+  .modal-panel{
+    width:min(980px,100%);max-height:90vh;overflow:auto;background:var(--black-soft);
+    border:1px solid #2b2b2b;border-radius:18px;box-shadow:0 30px 80px rgba(0,0,0,0.45);
+  }
+  .modal-layout{
+    display:grid;grid-template-columns:minmax(320px, 1.05fr) minmax(280px, .95fr);
+  }
+  .modal-media{
+    min-height:320px;background:linear-gradient(180deg, #181818, #0d0d0d);
+  }
+  .modal-media img{
+    width:100%;height:100%;object-fit:contain;object-position:center;display:block;
+  }
+  .modal-content{
+    padding:30px 28px 28px;
+  }
+  .modal-top{
+    display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:24px;
+  }
+  .modal-top h3{
+    font-size:31px;line-height:1.1;
+  }
+  .modal-close{
+    width:42px;height:42px;border-radius:50%;border:1px solid #333;background:transparent;
+    color:var(--white);font-size:24px;cursor:pointer;flex:0 0 auto;
+  }
+  .modal-close:hover{
+    border-color:var(--gold);color:var(--gold);
+  }
+  .modal-type{
+    color:var(--gold);font-size:12px;letter-spacing:2px;text-transform:uppercase;display:block;margin-bottom:10px;
+  }
+  .modal-price{
+    color:var(--gold);font-size:34px;font-family:'Georgia',serif;margin-bottom:20px;
+  }
+  .modal-description{
+    color:var(--gray);font-size:14px;line-height:1.7;margin-bottom:24px;
+  }
+  .modal-spec-grid{
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:28px;
+  }
+  .modal-spec{
+    border:1px solid #232323;border-radius:14px;padding:14px;background:#101010;
+  }
+  .modal-spec-label{
+    display:block;color:var(--gray);font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;
+  }
+  .modal-spec-value{
+    color:var(--white);font-size:15px;font-weight:600;
+  }
+  .modal-actions{
+    display:flex;gap:14px;flex-wrap:wrap;
+  }
 
   /* WHY US */
   .why{background:var(--black-soft);border-top:1px solid #1f1f1f;border-bottom:1px solid #1f1f1f;}
@@ -188,6 +256,13 @@
   @media(max-width:768px){
     nav{display:none;}
     section{padding:70px 5%;}
+    .modal{padding:14px;}
+    .modal-layout{grid-template-columns:1fr;}
+    .modal-media{min-height:240px;}
+    .modal-content{padding:22px 18px 20px;}
+    .modal-top h3{font-size:25px;}
+    .modal-price{font-size:28px;}
+    .modal-spec-grid{grid-template-columns:1fr;}
   }
 </style>
 </head>
@@ -207,8 +282,7 @@
 
 <!-- HERO -->
 <section class="hero">
-  <video id="heroVideo" autoplay muted loop playsinline webkit-playsinline="true" preload="auto" poster="https://images.pexels.com/videos/15341118/videographie-0155-15341118.jpeg?auto=compress&cs=tinysrgb&w=1920">
-    <source src="https://videos.pexels.com/video-files/15341118/15341118-hd_1366_720_24fps.mp4" type="video/mp4">
+  <video autoplay muted loop playsinline poster="https://images.pexels.com/videos/15341118/videographie-0155-15341118.jpeg?auto=compress&cs=tinysrgb&w=1920">
     <source src="https://videos.pexels.com/video-files/15341118/15341118-uhd_2732_1152_24fps.mp4" type="video/mp4">
   </video>
   <div class="hero-content">
@@ -281,6 +355,32 @@
   <a href="https://wa.me/55" class="btn btn-primary">Enviar Mensagem no WhatsApp</a>
 </section>
 
+<div class="modal" id="vehicleModal" aria-hidden="true">
+  <div class="modal-panel">
+    <div class="modal-layout">
+      <div class="modal-media">
+        <img id="modalImage" src="" alt="">
+      </div>
+      <div class="modal-content">
+        <div class="modal-top">
+          <div>
+            <span class="modal-type" id="modalType"></span>
+            <h3 id="modalTitle"></h3>
+          </div>
+          <button class="modal-close" id="modalClose" type="button" aria-label="Fechar modal">&times;</button>
+        </div>
+        <div class="modal-price" id="modalPrice"></div>
+        <p class="modal-description" id="modalDescription"></p>
+        <div class="modal-spec-grid" id="modalSpecs"></div>
+        <div class="modal-actions">
+          <a href="https://wa.me/55" class="btn btn-primary">Quero esse veiculo</a>
+          <a href="#contato" class="btn btn-outline">Falar com consultor</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <footer>
   <div class="footer-grid">
     <div class="footer-col">
@@ -303,36 +403,71 @@
 </footer>
 
 <script>
-const heroVideo = document.getElementById('heroVideo');
-if (heroVideo) {
-  heroVideo.muted = true;
-  heroVideo.playsInline = true;
-  const tryPlay = () => {
-    const p = heroVideo.play();
-    if (p !== undefined) {
-      p.catch(() => {
-        // iOS pode bloquear até haver interação; tenta de novo no primeiro toque
-        const resume = () => { heroVideo.play(); document.removeEventListener('touchstart', resume); document.removeEventListener('click', resume); };
-        document.addEventListener('touchstart', resume, { once: true });
-        document.addEventListener('click', resume, { once: true });
-      });
-    }
-  };
-  if (heroVideo.readyState >= 2) tryPlay();
-  heroVideo.addEventListener('loadeddata', tryPlay);
-  document.addEventListener('visibilitychange', () => { if (!document.hidden) tryPlay(); });
-}
-
 const vehicles = [
-  {name:"Chevrolet Onix LT 1.0", type:"hatch", year:"2021", km:"42.000 km", price:"64.900", img:"https://images.pexels.com/photos/31943401/pexels-photo-31943401.jpeg?auto=compress&cs=tinysrgb&w=900"},
-  {name:"Hyundai HB20S Comfort", type:"sedan", year:"2020", km:"58.000 km", price:"61.500", img:"https://images.pexels.com/photos/11329085/pexels-photo-11329085.jpeg?auto=compress&cs=tinysrgb&w=900"},
-  {name:"Jeep Renegade Sport", type:"suv", year:"2022", km:"31.000 km", price:"94.900", img:"https://images.pexels.com/photos/14776590/pexels-photo-14776590.jpeg?auto=compress&cs=tinysrgb&w=900"},
-  {name:"Fiat Toro Freedom", type:"picape", year:"2021", km:"47.000 km", price:"112.000", img:"https://images.pexels.com/photos/10345648/pexels-photo-10345648.jpeg?auto=compress&cs=tinysrgb&w=900"},
-  {name:"Toyota Corolla XEi", type:"sedan", year:"2019", km:"65.000 km", price:"98.500", img:"https://images.pexels.com/photos/1213293/pexels-photo-1213293.jpeg?auto=compress&cs=tinysrgb&w=900"},
-  {name:"Volkswagen T-Cross 200 TSI", type:"suv", year:"2022", km:"28.000 km", price:"99.900", img:"https://images.pexels.com/photos/14252339/pexels-photo-14252339.jpeg?auto=compress&cs=tinysrgb&w=900"},
+  {name:"Chevrolet Onix LT 1.0", type:"hatch", year:"2021", km:"42.000 km", price:"64.900", img:"img/chevrolet.pngonix.png", fuel:"Flex", transmission:"Manual", engine:"1.0", color:"Branco", doors:"4 portas", description:"Hatch economico, ideal para uso urbano, com bom espaço interno e manutenção acessivel."},
+  {name:"Hyundai HB20S Comfort", type:"sedan", year:"2020", km:"58.000 km", price:"61.500", img:"img/hb20sconfort.png", fuel:"Flex", transmission:"Manual", engine:"1.0", color:"Prata", doors:"4 portas", description:"Sedan compacto com porta-malas generoso, dirigibilidade leve e excelente custo-beneficio."},
+  {name:"Jeep Renegade Sport", type:"suv", year:"2022", km:"31.000 km", price:"94.900", img:"img/jeeprenegadesport.png", fuel:"Flex", transmission:"Automatico", engine:"1.8", color:"Cinza", doors:"4 portas", description:"SUV com posicao de dirigir elevada, acabamento robusto e foco em conforto para cidade e estrada."},
+  {name:"Fiat Toro Freedom", type:"picape", year:"2021", km:"47.000 km", price:"112.000", img:"img/fiattorofreedon.png", fuel:"Diesel", transmission:"Automatico", engine:"2.0", color:"Preto", doors:"4 portas", description:"Picape intermediaria com caçamba versatil, boa capacidade de carga e excelente presença visual."},
+  {name:"Toyota Corolla XEi", type:"sedan", year:"2019", km:"65.000 km", price:"98.500", img:"img/corollaxei.png", fuel:"Flex", transmission:"Automatico", engine:"2.0", color:"Prata", doors:"4 portas", description:"Sedan reconhecido por conforto, confiabilidade mecanica e ótima experiência em viagens."},
+  {name:"Volkswagen T-Cross 200 TSI", type:"suv", year:"2022", km:"28.000 km", price:"99.900", img:"img/tcross200tsi.png", fuel:"Flex", transmission:"Automatico", engine:"1.0 Turbo", color:"Branco", doors:"4 portas", description:"SUV moderno com motorização turbo, bom pacote de tecnologia e dirigibilidade equilibrada."},
 ];
 
 const grid = document.getElementById('vehicleGrid');
+const modal = document.getElementById('vehicleModal');
+const modalImage = document.getElementById('modalImage');
+const modalType = document.getElementById('modalType');
+const modalTitle = document.getElementById('modalTitle');
+const modalPrice = document.getElementById('modalPrice');
+const modalDescription = document.getElementById('modalDescription');
+const modalSpecs = document.getElementById('modalSpecs');
+const modalClose = document.getElementById('modalClose');
+
+function formatType(type){
+  const labels = {
+    hatch: "Hatch",
+    sedan: "Sedan",
+    suv: "SUV",
+    picape: "Picape"
+  };
+
+  return labels[type] || type;
+}
+
+function openModal(vehicle){
+  const specs = [
+    {label:"Ano", value:vehicle.year},
+    {label:"Quilometragem", value:vehicle.km},
+    {label:"Combustivel", value:vehicle.fuel},
+    {label:"Cambio", value:vehicle.transmission},
+    {label:"Motor", value:vehicle.engine},
+    {label:"Cor", value:vehicle.color},
+    {label:"Carroceria", value:formatType(vehicle.type)},
+    {label:"Portas", value:vehicle.doors}
+  ];
+
+  modalImage.src = vehicle.img;
+  modalImage.alt = vehicle.name;
+  modalType.textContent = formatType(vehicle.type);
+  modalTitle.textContent = vehicle.name;
+  modalPrice.textContent = `R$ ${vehicle.price}`;
+  modalDescription.textContent = vehicle.description;
+  modalSpecs.innerHTML = specs.map(spec => `
+    <div class="modal-spec">
+      <span class="modal-spec-label">${spec.label}</span>
+      <strong class="modal-spec-value">${spec.value}</strong>
+    </div>
+  `).join("");
+
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(){
+  modal.classList.remove('open');
+  modal.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+}
 
 function render(filter){
   grid.innerHTML = "";
@@ -341,6 +476,9 @@ function render(filter){
     .forEach(v => {
       const card = document.createElement('div');
       card.className = "card";
+      card.tabIndex = 0;
+      card.setAttribute('role', 'button');
+      card.setAttribute('aria-label', `Abrir detalhes de ${v.name}`);
       card.innerHTML = `
         <div class="card-img">
           <span class="card-tag">${v.year}</span>
@@ -357,9 +495,16 @@ function render(filter){
               <div class="price-label">À vista</div>
               <div class="price">R$ ${v.price}</div>
             </div>
-            <a href="https://wa.me/55" class="card-cta">Simular →</a>
+            <span class="card-cta">Ver detalhes →</span>
           </div>
         </div>`;
+      card.addEventListener('click', () => openModal(v));
+      card.addEventListener('keydown', event => {
+        if(event.key === 'Enter' || event.key === ' '){
+          event.preventDefault();
+          openModal(v);
+        }
+      });
       grid.appendChild(card);
     });
 }
@@ -371,6 +516,20 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.classList.add('active');
     render(btn.dataset.filter);
   });
+});
+
+modalClose.addEventListener('click', closeModal);
+
+modal.addEventListener('click', event => {
+  if(event.target === modal){
+    closeModal();
+  }
+});
+
+document.addEventListener('keydown', event => {
+  if(event.key === 'Escape' && modal.classList.contains('open')){
+    closeModal();
+  }
 });
 </script>
 
