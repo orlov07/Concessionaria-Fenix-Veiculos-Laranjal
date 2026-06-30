@@ -115,20 +115,20 @@
 
   /* VEHICLE GRID */
   .grid{
-    display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:34px;
-    max-width:1300px;margin:0 auto;
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:28px;
+    max-width:1500px;margin:0 auto;justify-items:center;
   }
   .card{
     background:var(--black-soft);border:1px solid #1f1f1f;border-radius:14px;overflow:hidden;
     transition:transform 0.35s, border-color 0.35s, box-shadow .35s;position:relative;
-    cursor:pointer;
+    cursor:pointer;width:100%;max-width:480px;
   }
   .card:hover{
     transform:translateY(-8px);border-color:var(--gold);
     box-shadow:0 20px 40px rgba(0,0,0,0.5);
   }
   .card-img{
-    height:230px;overflow:hidden;position:relative;box-sizing:border-box;
+    height:200px;overflow:hidden;position:relative;box-sizing:border-box;
     background:linear-gradient(180deg, #171717, #0d0d0d);
   }
   .card-img img{
