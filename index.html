@@ -51,8 +51,8 @@
 
   /* HERO */
   .hero{
-    position:relative;height:100vh;display:flex;align-items:center;justify-content:center;
-    text-align:center;overflow:hidden;
+    position:relative;height:100vh;height:100dvh;display:flex;align-items:center;justify-content:center;
+    text-align:center;overflow:hidden;background:#000;
   }
   .hero video{
     position:absolute;top:0;left:0;width:100%;height:100%;
@@ -207,7 +207,8 @@
 
 <!-- HERO -->
 <section class="hero">
-  <video autoplay muted loop playsinline poster="https://images.pexels.com/videos/15341118/videographie-0155-15341118.jpeg?auto=compress&cs=tinysrgb&w=1920">
+  <video id="heroVideo" autoplay muted loop playsinline webkit-playsinline="true" preload="auto" poster="https://images.pexels.com/videos/15341118/videographie-0155-15341118.jpeg?auto=compress&cs=tinysrgb&w=1920">
+    <source src="https://videos.pexels.com/video-files/15341118/15341118-hd_1366_720_24fps.mp4" type="video/mp4">
     <source src="https://videos.pexels.com/video-files/15341118/15341118-uhd_2732_1152_24fps.mp4" type="video/mp4">
   </video>
   <div class="hero-content">
@@ -302,6 +303,26 @@
 </footer>
 
 <script>
+const heroVideo = document.getElementById('heroVideo');
+if (heroVideo) {
+  heroVideo.muted = true;
+  heroVideo.playsInline = true;
+  const tryPlay = () => {
+    const p = heroVideo.play();
+    if (p !== undefined) {
+      p.catch(() => {
+        // iOS pode bloquear até haver interação; tenta de novo no primeiro toque
+        const resume = () => { heroVideo.play(); document.removeEventListener('touchstart', resume); document.removeEventListener('click', resume); };
+        document.addEventListener('touchstart', resume, { once: true });
+        document.addEventListener('click', resume, { once: true });
+      });
+    }
+  };
+  if (heroVideo.readyState >= 2) tryPlay();
+  heroVideo.addEventListener('loadeddata', tryPlay);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) tryPlay(); });
+}
+
 const vehicles = [
   {name:"Chevrolet Onix LT 1.0", type:"hatch", year:"2021", km:"42.000 km", price:"64.900", img:"https://images.pexels.com/photos/31943401/pexels-photo-31943401.jpeg?auto=compress&cs=tinysrgb&w=900"},
   {name:"Hyundai HB20S Comfort", type:"sedan", year:"2020", km:"58.000 km", price:"61.500", img:"https://images.pexels.com/photos/11329085/pexels-photo-11329085.jpeg?auto=compress&cs=tinysrgb&w=900"},
